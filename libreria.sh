@@ -63,7 +63,7 @@ function f_esta_instalado {
 function f_instalar {
 	if [[ `f_esta_instalado $1;echo $?` = 1 ]]
 		then
-			if [[ `f_eres_root;echo$1` = 0 ]]
+			if [[ `f_eres_root;echo$?` = 0 ]]
 				then
 					apt-get install $1
 					return 0
@@ -95,9 +95,9 @@ function f_esta_montado {
 #Acepta como primer argumento el dispositivo de bloque,
 #y como segundo argumento, el directorio donde se quiere montar.
 function f_montar {
-	if [[ `f_eres_root;echo $1` = 0 ]]
+	if [[ `f_eres_root;echo $?` = 0 ]]
 		then
-			if [[ `f_existe_directorio $2;echo $1` = 0 ]]
+			if [[ `f_existe_directorio $2;echo $?` = 0 ]]
 				then
 					mount $1 $2
 					return 0

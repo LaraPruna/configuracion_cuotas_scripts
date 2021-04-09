@@ -118,7 +118,11 @@ function f_montar {
 function f_paquete_esta_actualizado {
 	if [[ $(f_esta_instalado $1;echo $?) = 0 ]]
 		then
-			if [[ $(apt policy $1 | egrep instalados | awk '{print $2}') = $(apt policy $1 | egrep candidato | awk '{print $2}') ]]
+			inst=$(apt policy $1 2>/dev/null | egrep Instalados | awk '{print $2}')
+			cand=$(apt policy $1 2>/dev/null | egrep Candidato | awk '{print $2}')
+			inst2=$(apt policy $1 2>/dev/null | egrep Installed | awk '{print $2}')
+			cand2=$(apt policy $1 2>/dev/null | egrep Candidate | awk '{print $2}')
+			if [[ $inst = $cand || $inst2 = $cand2 ]]
 				then
 					return 0
 				else
@@ -155,3 +159,4 @@ function f_actualizar_paquete {
 			return 3
 	fi
 }
+

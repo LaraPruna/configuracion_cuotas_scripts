@@ -50,18 +50,29 @@ if [[ $(f_está_montado $volumen) = 1 ]]; then
 		echo 'Creando directorio /QUOTA...'
 		mkdir /QUOTA
 	fi
+	echo 'Montando dispositivo en el directorio /QUOTA.'
+	f_montar $volumen /QUOTA
+	echo 'Dispositivo montado.'
+
 else
 	if [[ $(df | egrep $volumen | awk '{print $6}') = '/QUOTA' ]]; then
-		'El dispositivo está montado en /QUOTA.'
+		echo 'El dispositivo está montado en /QUOTA.'
 	else
 		echo 'El dispositivo está montado en otro directorio. ¿Desea desmontarlo? (s/n)'
 		read resp4
 		if [[ $resp4 = 's' ]]; then
 			echo 'Desmontando dispositivo...'
 			umount $volumen
+			if [[ $(f_existe_directorio /QUOTA; echo $?) = 1 ]]; then
+				echo 'Creando directorio /QUOTA...'
+				mkdir /QUOTA
+			fi
+			echo 'Montando dispositivo en el directorio /QUOTA.'
+			f_montar $volumen /QUOTA
+			echo 'Dispositivo montado.'
 		else
 			echo 'Fin del programa.'
 			exit
-echo 'Montando dispositivo en /QUOTA...'
-f_montar $volumen /QUOTA
-
+		fi
+	fi
+fi
